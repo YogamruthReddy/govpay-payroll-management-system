@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GovPay | Next-Gen Government Payroll</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    
+    <!-- Navigation -->
+    <nav class="navbar glass">
+        <div class="nav-container">
+            <div class="logo">
+                <i data-lucide="shield-check" class="text-accent"></i>
+                <span>GovPay</span>
+            </div>
+            <div class="nav-links">
+                <a href="#features">Architecture</a>
+                <a href="#engine">Rule Simulator</a>
+                <a href="#rbac">RBAC Demo</a>
+                <a href="#leave-demo">Overlap Demo</a>
+            </div>
+            <a href="http://localhost:3000" class="btn btn-primary" target="_blank">
+                Access Portal
+                <i data-lucide="arrow-right" class="icon-small"></i>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        
+        <div class="hero-content reveal">
+            <div class="badge-wrapper">
+                <span class="badge glass-badge">v2.0 Production Ready <span class="pulse-dot"></span></span>
+            </div>
+            <h1 class="hero-title">
+                The Operating System for <br/> 
+                <span class="gradient-text">Government Payroll.</span>
+            </h1>
+            <p class="hero-subtitle">
+                An industry-grade, highly secure, and dynamically configurable payroll management system designed for maximum compliance and zero anomalies.
+            </p>
+            <div class="hero-cta">
+                <a href="#engine" class="btn btn-primary btn-large">
+                    Try the Simulator
+                </a>
+                <a href="https://github.com" target="_blank" class="btn btn-outline btn-large">
+                    <i data-lucide="github"></i> View Source
+                </a>
+            </div>
+            
+            <div class="hero-mockup-wrapper reveal">
+                <div class="glass-panel mockup-panel">
+                    <!-- Day-in-the-Life Admin Dashboard snippet added to the hero -->
+                    <div class="admin-dash-overlay font-mono text-xs hidden md:block">
+                        <div class="dash-stat">
+                            <span class="text-muted">Total Disbursed:</span>
+                            <span class="text-emerald animate-counter" data-target="4589000">₹0</span>
+                        </div>
+                        <div class="dash-stat">
+                            <span class="text-muted">Active Rules:</span>
+                            <span class="text-accent">14 Configured</span>
+                        </div>
+                    </div>
+                    <img src="assets/govpay_hero_ui.png" alt="GovPay Dashboard Interface" class="mockup-img">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Logo Cloud / Tech Stack -->
+    <section class="tech-marquee reveal">
+        <p class="text-muted uppercase tracking-widest text-sm text-center mb-6 font-semibold">Powered by Industry Standards</p>
+        <div class="marquee-track">
+            <div class="marquee-content flex gap-8 justify-center flex-wrap">
+                <div class="tech-pill glass"><i data-lucide="file-code"></i> React (Vite)</div>
+                <div class="tech-pill glass"><i data-lucide="server"></i> Express API</div>
+                <div class="tech-pill glass"><i data-lucide="database"></i> SQLite Engine</div>
+                <div class="tech-pill glass"><i data-lucide="lock"></i> Dual JWT</div>
+                <div class="tech-pill glass"><i data-lucide="shield"></i> Helmet Security</div>
+                <div class="tech-pill glass"><i data-lucide="bar-chart-2"></i> Winston Logs</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive: Dynamic Rule Engine Simulator -->
+    <section id="engine" class="container section">
+        <div class="split-layout align-center">
+            <div class="split-text reveal">
+                <span class="badge glass-badge text-accent mb-4">Live Simulation</span>
+                <h2 class="mb-4">Dynamic Payroll <br/> <span class="gradient-text">Rule Engine.</span></h2>
+                <p class="mb-6">Our processing engine isn't hardcoded. Try toggling the active rules and watch the server-side logic instantly recalculate your simulated check.</p>
+                
+                <ul class="feature-list">
+                    <li><i data-lucide="check-circle-2" class="text-emerald"></i> <strong>Configurable Mechanics:</strong> Fixed Amounts (₹) or Percentages (%).</li>
+                    <li><i data-lucide="check-circle-2" class="text-emerald"></i> <strong>Live Toggling:</strong> Apply changes across the entire workforce instantly.</li>
+                </ul>
+            </div>
+            
+            <div class="split-visual reveal">
+                <!-- Interactive Calc Component -->
+                <div class="calc-widget glass ring-glow">
+                    <div class="calc-header text-center mb-4 border-b border-white-10 pb-4">
+                        <h4 class="text-muted mb-1 font-mono text-sm uppercase">Employee Basic Salary</h4>
+                        <div class="flex items-center justify-center gap-2">
+                            <span class="text-2xl font-bold text-accent">₹</span>
+                            <input type="number" id="basic-input" class="calc-input" value="85000">
+                        </div>
+                    </div>
+
+                    <div class="calc-body">
+                        <div class="calc-group mb-4">
+                            <h5 class="flex justify-between text-sm mb-2"><span class="text-emerald">Allowances (+)</span> <span id="total-allowances" class="font-mono text-emerald">+ ₹0</span></h5>
+                            <label class="toggle-row glass"><input type="checkbox" class="rule-toggle allowance" data-type="percent" data-val="15" checked><div class="toggle-slider"></div><span class="flex-1 text-sm">HRA (15% of Basic)</span></label>
+                            <label class="toggle-row glass"><input type="checkbox" class="rule-toggle allowance" data-type="fixed" data-val="2500" checked><div class="toggle-slider"></div><span class="flex-1 text-sm">Transport (₹2500 fixed)</span></label>
+                        </div>
+                        <div class="calc-group mb-4">
+                            <h5 class="flex justify-between text-sm mb-2"><span class="text-rose">Deductions (-)</span> <span id="total-deductions" class="font-mono text-rose">- ₹0</span></h5>
+                            <label class="toggle-row glass"><input type="checkbox" class="rule-toggle deduction" data-type="fixed" data-val="1800" checked><div class="toggle-slider"></div><span class="flex-1 text-sm">Provident Fund (₹1800 fixed)</span></label>
+                            <label class="toggle-row glass"><input type="checkbox" class="rule-toggle deduction" data-type="percent" data-val="5" checked><div class="toggle-slider"></div><span class="flex-1 text-sm">Professional Tax (5% of Basic)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="calc-footer mt-6 pt-4 border-t border-white-10 flex justify-between items-end">
+                        <span class="text-muted font-semibold uppercase text-sm tracking-widest">Final Net Pay</span>
+                        <div class="net-value font-mono font-bold text-3xl text-emerald">₹<span id="net-pay-val">0</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive: Leave Overlap Validator -->
+    <section id="leave-demo" class="container section">
+        <div class="split-layout align-center flex-row-reverse">
+            <div class="split-text reveal">
+                <span class="badge glass-badge text-purple mb-4">Live Simulation</span>
+                <h2 class="mb-4">Strict Overlap <br/> <span class="gradient-text">Validator.</span></h2>
+                <p class="mb-6">The backend enforces strict chronological assertions on leave dates, preventing dual-bookings effortlessly.</p>
+                
+                <ul class="feature-list">
+                    <li><i data-lucide="alert-circle" class="text-purple"></i> <strong>Simulation:</strong> Try selecting a leave block that overlaps with the <span class="text-emerald font-bold">Approved Leave</span> below.</li>
+                </ul>
+            </div>
+            
+            <div class="split-visual reveal">
+                <div class="glass p-6 rounded-2xl relative">
+                    <!-- Overlap Error Alert -->
+                    <div id="overlap-alert" class="overlap-alert hidden">
+                        <i data-lucide="shield-alert" class="text-rose mb-2 w-8 h-8"></i>
+                        <h4 class="text-rose">400 Bad Request</h4>
+                        <p class="text-xs font-mono text-muted mt-1">Date overlaps with an existing approved leave</p>
+                    </div>
+
+                    <h4 class="mb-4 text-center">August 2026</h4>
+                    <div class="calendar-grid">
+                        <div class="cal-day header">M</div><div class="cal-day header">T</div><div class="cal-day header">W</div><div class="cal-day header">T</div><div class="cal-day header">F</div><div class="cal-day header">S</div><div class="cal-day header">S</div>
+                        
+                        <!-- Empty padding -->
+                        <div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div>
+                        
+                        <div class="cal-day selectable" data-date="1">1</div>
+                        <div class="cal-day selectable" data-date="2">2</div>
+                        <div class="cal-day selectable" data-date="3">3</div>
+                        <div class="cal-day selectable" data-date="4">4</div>
+                        <div class="cal-day selectable" data-date="5">5</div>
+                        <div class="cal-day selectable" data-date="6">6</div>
+                        <div class="cal-day selectable" data-date="7">7</div>
+                        <div class="cal-day selectable" data-date="8">8</div>
+                        <div class="cal-day selectable" data-date="9">9</div>
+                        <div class="cal-day selectable" data-date="10">10</div>
+                        <div class="cal-day selectable" data-date="11">11</div>
+                        <div class="cal-day approved-leave" data-date="12">12</div>
+                        <div class="cal-day approved-leave" data-date="13">13</div>
+                        <div class="cal-day approved-leave" data-date="14">14</div>
+                        <div class="cal-day selectable" data-date="15">15</div>
+                        <div class="cal-day selectable" data-date="16">16</div>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <button id="check-leave-btn" class="btn btn-primary w-full disabled" disabled>Apply for Selected Leave</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive: RBAC Visualizer -->
+    <section id="rbac" class="container section pt-0">
+        <div class="section-header reveal mb-10">
+            <h2>Zero-Trust <span class="gradient-text">Middleware Routing.</span></h2>
+            <p>Select a user role below to see how our strict Role-Based Access Control logic protects endpoints.</p>
+        </div>
+
+        <div class="rbac-demo-container reveal glass">
+            
+            <div class="rbac-controls mb-8 text-center flex justify-center gap-4 flex-wrap border-b border-white-10 pb-6">
+                <button class="btn btn-outline rbac-btn active" data-role="admin"><i data-lucide="shield"></i> System Admin</button>
+                <button class="btn btn-outline rbac-btn" data-role="officer"><i data-lucide="briefcase"></i> Payroll Officer</button>
+                <button class="btn btn-outline rbac-btn" data-role="employee"><i data-lucide="user"></i> Employee</button>
+            </div>
+
+            <div class="rbac-dashboard-mock">
+                <!-- Action 1 -->
+                <div class="rbac-action admin-only">
+                    <div class="action-info">
+                        <strong>Edit Global Payroll Rules</strong>
+                        <span class="text-xs text-muted block font-mono mt-1">router.put('/payroll-rules', roleMiddleware('ADMIN'))</span>
+                    </div>
+                    <button class="btn btn-primary btn-sm rbac-access-btn"><i data-lucide="lock-open" class="icon-small"></i> Execute</button>
+                    <div class="rbac-overlay"><i data-lucide="lock" class="text-rose"></i> <span class="text-sm font-semibold ml-2">Access Denied (403)</span></div>
+                </div>
+
+                <!-- Action 2 -->
+                <div class="rbac-action officer-only">
+                    <div class="action-info">
+                        <strong>Disburse Department Payroll</strong>
+                        <span class="text-xs text-muted block font-mono mt-1">router.post('/payroll/batch', roleMiddleware('ADMIN', 'OFFICER'))</span>
+                    </div>
+                    <button class="btn btn-primary btn-sm rbac-access-btn"><i data-lucide="lock-open" class="icon-small"></i> Execute</button>
+                    <div class="rbac-overlay"><i data-lucide="lock" class="text-rose"></i> <span class="text-sm font-semibold ml-2">Access Denied (403)</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture & Features Grid -->
+    <section id="features" class="container section pt-0">
+        
+        <div class="bento-grid">
+            <!-- Token Lifecycle Terminal -->
+            <div class="bento-card reveal glass">
+                <div class="bento-content mb-4">
+                    <div class="icon-box"><i data-lucide="key"></i></div>
+                    <h3>Secure JWT Handshakes</h3>
+                    <p class="mb-4">Robust dual-token architecture handled invisibly by Axios interceptors.</p>
+                </div>
+                
+                <div class="terminal-mock glass font-mono p-4 rounded-xl border border-white-10 bg-black h-48 overflow-y-hidden relative text-xs">
+                    <div class="terminal-header flex gap-2 mb-3">
+                        <span class="w-3 h-3 rounded-full bg-rose border border-rose"></span>
+                        <span class="w-3 h-3 rounded-full bg-amber-500 border border-amber-600"></span>
+                        <span class="w-3 h-3 rounded-full bg-emerald border border-emerald"></span>
+                    </div>
+                    <div id="terminal-screen" class="terminal-content"></div>
+                    <button id="run-terminal-btn" class="btn btn-outline text-xs absolute bottom-4 right-4"><i data-lucide="play" class="icon-small"></i> Run</button>
+                </div>
+            </div>
+
+            <!-- Anomaly Detection Live Graph -->
+            <div class="bento-card col-span-2 reveal glass">
+                <div class="bento-content mb-4 flex justify-between items-start">
+                    <div>
+                        <div class="icon-box"><i data-lucide="activity"></i></div>
+                        <h3>Live Anomaly Detection</h3>
+                        <p>The backend flags NetPay exceeding 1.5x departmental averages.</p>
+                    </div>
+                    <button id="trigger-anomaly-btn" class="btn btn-outline border-rose text-rose hover:bg-rose hover:text-white"><i data-lucide="zap"></i> Simulate Fraud</button>
+                </div>
+                
+                <div class="graph-mock relative mt-4 h-40 bg-black rounded-lg border border-white-10 overflow-hidden flex items-end">
+                    <!-- CSS Bars simulating a graph -->
+                    <div class="graph-bar safe" style="height: 30%"></div>
+                    <div class="graph-bar safe" style="height: 32%"></div>
+                    <div class="graph-bar safe" style="height: 28%"></div>
+                    <div class="graph-bar safe" style="height: 35%"></div>
+                    <div class="graph-bar safe" style="height: 31%"></div>
+                    <div class="graph-bar safe" style="height: 34%"></div>
+                    <!-- Target for anomaly spike -->
+                    <div id="anomaly-bar" class="graph-bar safe transition-all duration-500" style="height: 0%"></div>
+                    
+                    <!-- Threshold Line -->
+                    <div class="threshold-line border-t border-dashed border-rose w-full absolute top-[30%] left-0">
+                        <span class="text-xs text-rose absolute -top-5 right-2 font-mono">1.5x Limit</span>
+                    </div>
+
+                    <!-- Winston Log overlay -->
+                    <div id="anomaly-log" class="absolute top-4 left-4 right-4 p-3 bg-rose border border-rose rounded-lg bg-opacity-20 backdrop-blur-md text-rose font-mono text-xs shadow-glow transition-all duration-300 opacity-0 translate-y-4">
+                        {"level":"warn", "message":"Anomaly Alert: NetPay limits breached", "user_id":"EMP-09"}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer border-t border-white-10 mt-10 relative overflow-hidden">
+        <div class="glow-orb orb-1" style="bottom: -200px; left: 50%; width: 400px; height: 400px;"></div>
+        <div class="container py-10 flex flex-col md:flex-row justify-between items-center text-center md:text-left z-10 relative">
+            <div class="mb-6 md:mb-0">
+                <div class="logo justify-center md:justify-start mb-2">
+                    <i data-lucide="shield-check" class="text-accent"></i>
+                    <span>GovPay v2.0</span>
+                </div>
+                <p class="text-muted text-sm max-w-sm">Industry-grade government payroll architecture deployed as a modern SaaS portfolio.</p>
+            </div>
+            <div class="flex gap-4">
+                <a href="#" class="social-link"><i data-lucide="github"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script Init -->
+    <script src="script.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

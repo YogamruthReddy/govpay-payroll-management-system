@@ -31,13 +31,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                         department: userData.employee?.department,
                         position: userData.employee?.position,
                     });
-                } catch (err) {
+                } catch {
+                    // Token invalid or refresh failed — clear everything
                     localStorage.removeItem('token');
+                    localStorage.removeItem('refreshToken');
                 }
             }
             setLoading(false);
         };
-
         checkAuth();
     }, []);
 
@@ -47,10 +48,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setLoading(true);
             const response = await authAPI.login(username, password);
 
-            // Store token
+            // Store BOTH tokens
             localStorage.setItem('token', response.token);
+            if (response.refreshToken) {
+                localStorage.setItem('refreshToken', response.refreshToken);
+            }
 
-            // Set user data
             setUser({
                 id: response.user.employee?.id?.toString() || response.user.id.toString(),
                 name: response.user.employee?.name || response.user.username,
@@ -66,9 +69,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     };
 
-    const logout = () => {
-        localStorage.removeItem('token');
-        setUser(null);
+    const logout = async () => {
+        try {
+            const refreshToken = localStorage.getItem('refreshToken');
+            if (refreshToken) {
+                // Revoke refresh token on server
+                await authAPI.logout(refreshToken);
+            }
+        } catch {
+            // Ignore errors on logout
+        } finally {
+            localStorage.removeItem('token');
+            localStorage.removeItem('refreshToken');
+            setUser(null);
+        }
     };
 
     return (

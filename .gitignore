@@ -32,3 +32,6 @@ dist-ssr
 *.db
 *.sqlite
 *.sqlite3
+
+# Large Media Files
+*.mp4

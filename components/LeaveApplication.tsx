@@ -218,7 +218,7 @@ const LeaveApplication: React.FC = () => {
                                     </div>
                                     <div className="flex items-center gap-4">
                                         <span className="text-sm font-medium text-slate-600">{leave.days} days</span>
-                                        <Badge variant={leave.status === 'approved' ? 'success' : leave.status === 'rejected' ? 'error' : 'warning'}>
+                                        <Badge variant={leave.status === 'approved' ? 'success' : leave.status === 'rejected' ? 'danger' : 'warning'}>
                                             {leave.status.charAt(0).toUpperCase() + leave.status.slice(1)}
                                         </Badge>
                                     </div>

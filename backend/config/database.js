@@ -53,6 +53,7 @@ const initDatabase = () => {
       hra REAL DEFAULT 0,
       deductions REAL DEFAULT 0,
       net_pay REAL NOT NULL,
+      is_anomaly INTEGER DEFAULT 0,
       status TEXT DEFAULT 'generated' CHECK(status IN ('generated', 'paid')),
       generated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (employee_id) REFERENCES employees(id),
@@ -90,6 +91,49 @@ const initDatabase = () => {
       event_date DATE NOT NULL,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (employee_id) REFERENCES employees(id)
+    )
+  `);
+
+    // ── NEW: Payroll Rules table ──────────────────────────────────────────────
+    db.exec(`
+    CREATE TABLE IF NOT EXISTS payroll_rules (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      type TEXT NOT NULL CHECK(type IN ('ALLOWANCE', 'DEDUCTION')),
+      calculation TEXT NOT NULL CHECK(calculation IN ('PERCENTAGE', 'FIXED')),
+      value REAL NOT NULL,
+      is_active INTEGER DEFAULT 1,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+    // Seed default payroll rules if none exist
+    const existingRules = db.prepare('SELECT COUNT(*) as count FROM payroll_rules').get();
+    if (existingRules.count === 0) {
+        const insertRule = db.prepare(`
+      INSERT INTO payroll_rules (name, type, calculation, value)
+      VALUES (?, ?, ?, ?)
+    `);
+        const seedRules = db.transaction(() => {
+            insertRule.run('HRA',               'ALLOWANCE',  'PERCENTAGE', 20);
+            insertRule.run('Dearness Allowance','ALLOWANCE',  'PERCENTAGE', 10);
+            insertRule.run('Medical Allowance', 'ALLOWANCE',  'FIXED',      2000);
+            insertRule.run('Provident Fund',    'DEDUCTION',  'PERCENTAGE', 12);
+            insertRule.run('Income Tax',        'DEDUCTION',  'PERCENTAGE', 10);
+        });
+        seedRules();
+        console.log('✅ Default payroll rules seeded');
+    }
+
+    // ── NEW: Refresh Tokens table ─────────────────────────────────────────────
+    db.exec(`
+    CREATE TABLE IF NOT EXISTS refresh_tokens (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
+      token TEXT UNIQUE NOT NULL,
+      expires_at DATETIME NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users(id)
     )
   `);
 
