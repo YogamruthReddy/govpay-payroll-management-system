@@ -263,7 +263,7 @@ A highly summarized subset of the `v1` RESTful Micro-Services Architecture.
 
 ## 🎨 UI Design System & Tokens
 
-GovPay utilizes a fully bespoke **"Cyberpunk / Enterprise Dark"** aesthetic decoupled from heavy frameworks like generic Tailwind UI. It relies on advanced CSS Custom Properties and Glassmorphism.
+GovPay utilizes a fully bespoke **"Cyberpunk / Enterprise Dark"** aesthetic decoupled from heavy frameworks like generic Tailwind UI. It relies on advanced CSS Custom Properties and Glass Morphism.
 
 *   `--bg-base`: **#0a0a0e** (Deep Canvas)
 *   `--accent`: **#3b82f6** (Neon Blue Primary Context)
